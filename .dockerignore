@@ -1,0 +1,47 @@
+# Ignore environment variable files
+.env
+.env.*
+
+# Log files
+logs/
+*.log
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# SSH keys and certificates
+id_rsa
+id_rsa.pub
+*.pem
+*.key
+*.crt
+*.csr
+
+# Build output
+dist/
+build/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+### VisualStudioCode ###
+.vscode/*
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide

@@ -1,0 +1,14 @@
+services:
+  ecr-token-refresher:
+    build: 
+      context: .
+    environment:
+      AWS_ACCESS_KEY_ID:     ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION:            ${AWS_REGION}
+      INTERVAL_SECONDS:      ${INTERVAL_SECONDS}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOME}/temp/ecr-token-refresher:/root/.docker
+      - ${HOME}/temp/ecr-token-refresher/Logs:/scripts/Logs
+# it maps the ./docker/ content from the container and maps it to host in my example ${HOME}/temp/ecr-token-refresher
