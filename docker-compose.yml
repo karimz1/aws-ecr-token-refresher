@@ -1,5 +1,5 @@
 services:
-  ecr-token-refresher:
+  aws-ecr-token-refresher:
     build: 
       context: .
     environment:
@@ -9,6 +9,6 @@ services:
       INTERVAL_SECONDS:      ${INTERVAL_SECONDS}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${HOME}/temp/ecr-token-refresher:/root/.docker
-      - ${HOME}/temp/ecr-token-refresher/Logs:/scripts/Logs
-# it maps the ./docker/ content from the container and maps it to host in my example ${HOME}/temp/ecr-token-refresher
+      - ${HOME}/temp/aws-ecr-token-refresher:/root/.docker
+      - ${HOME}/temp/aws-ecr-token-refresher/Logs:/scripts/Logs
+# it maps the ./docker/ content from the container and maps it to host in my example ${HOME}/temp/aws-ecr-token-refresher
