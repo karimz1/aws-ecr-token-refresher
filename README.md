@@ -1,6 +1,12 @@
+
+
 # AWS ECR Token Refresher
 
 > A lightweight sidecar that keeps your host Docker daemon **permanently authenticated** to Amazon Elastic Container Registry (ECR). Works out of the box with any tooling that relies on plain Basic Auth — such as [Watchtower](https://github.com/containrrr/watchtower), CI runners, GitOps agents, or manual `docker pull`s.
+
+[![License](https://img.shields.io/github/license/karimz1/aws-ecr-token-refresher?style=flat-square)](LICENSE)
+[![Docker pulls](https://img.shields.io/docker/pulls/karimz1/aws-ecr-token-refresher?style=flat-square)](https://hub.docker.com/r/karimz1/aws-ecr-token-refresher)
+[![Image size](https://img.shields.io/docker/image-size/karimz1/aws-ecr-token-refresher/latest?style=flat-square)](https://hub.docker.com/r/karimz1/aws-ecr-token-refresher/tags)
 
 ## 🚀 Why do I need this?
 
