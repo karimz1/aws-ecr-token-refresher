@@ -49,7 +49,7 @@ docker compose up -d
 
 From now on **any** container on the host can pull from private ECR repositories seamlessly.
 
-\### 2 — Example: Watchtower auto‑updates
+### 2 — Example: Watchtower auto‑updates
 
 ``` yml
 services:
