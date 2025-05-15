@@ -36,7 +36,7 @@ no `aws ecr get-login-password` headaches.
 ```yaml
 services:
   ecr-token-refresher:
-    image: ghcr.io/<your-org>/ecr-token-refresher:latest
+    image: docker.io/karimz1/ecr-token-refresher:latest
     restart: unless-stopped
     environment:
       AWS_ACCESS_KEY_ID:     ${AWS_ACCESS_KEY_ID}
