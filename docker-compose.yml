@@ -1,15 +1,14 @@
 services:
   aws-ecr-token-refresher:
-    build: 
-      context: .
+    image: docker.io/karimz1/aws-ecr-token-refresher:latest
+    restart: unless-stopped
     environment:
       AWS_ACCESS_KEY_ID:     ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      AWS_ACCOUNT_ID:        ${AWS_ACCOUNT_ID}
       AWS_REGION:            ${AWS_REGION}
       INTERVAL_SECONDS:      ${INTERVAL_SECONDS}
     volumes:
+      # write credentials here ⤵
+      - ${HOME}/.docker:/root/.docker
+      # talk to the host Docker daemon
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${HOME}/temp/aws-ecr-token-refresher:/root/.docker
-      - ${HOME}/temp/aws-ecr-token-refresher/Logs:/scripts/Logs
-# it maps the ./docker/ content from the container and maps it to host in my example ${HOME}/temp/aws-ecr-token-refresher

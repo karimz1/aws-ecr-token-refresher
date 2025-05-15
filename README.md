@@ -35,15 +35,14 @@ no `aws ecr get-login-password` headaches.
 
 ```yaml
 services:
-  ecr-token-refresher:
-    image: docker.io/karimz1/ecr-token-refresher:latest
+  aws-ecr-token-refresher:
+    image: docker.io/karimz1/aws-ecr-token-refresher:latest
     restart: unless-stopped
     environment:
       AWS_ACCESS_KEY_ID:     ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      AWS_REGION:            ${AWS_REGION:-eu-central-1}
-      # Optional — defaults to 300 seconds
-      INTERVAL_SECONDS:      ${INTERVAL_SECONDS:-300}
+      AWS_REGION:            ${AWS_REGION}
+      INTERVAL_SECONDS:      ${INTERVAL_SECONDS}
     volumes:
       # write credentials here ⤵
       - ${HOME}/.docker:/root/.docker
@@ -54,7 +53,7 @@ services:
 Spin it up:
 
 ```bash
-docker compose up -d ecr-token-refresher
+docker compose up -d
 ```
 
 That’s it! From now on **every** container on this host can pull
@@ -66,12 +65,14 @@ private ECR images automatically.
 services:
   watchtower:
     image: containrrr/watchtower
-    restart: unless-stopped
-    environment:
-      WATCHTOWER_CLEANUP: 'true'
+    container_name: watchtower
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${HOME}/.docker:/config     # same creds file
+      - ${HOME}/.docker:/config/.docker  # <-- mount Docker config
+    environment:
+      - DOCKER_CONFIG=/config/.docker
+    command: --label-enable --cleanup --interval 300 --rolling-restart
 ```
 
 No extra flags required—Watchtower is happy because the manifest
