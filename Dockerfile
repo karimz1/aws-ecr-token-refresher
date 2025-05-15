@@ -14,15 +14,10 @@ LABEL org.opencontainers.image.source="https://github.com/karimz1/aws-ecr-token-
 LABEL org.opencontainers.image.documentation="https://github.com/karimz1/aws-ecr-token-refresher/blob/main/README.md"
 LABEL org.opencontainers.image.licenses="Apache-2.0 license"
 
-
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       docker.io \
       git \
-      curl \
-      wget \
-      unzip \
-      tar \
       awscli \
     && rm -rf /var/lib/apt/lists/*
 
