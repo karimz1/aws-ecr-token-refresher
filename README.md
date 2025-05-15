@@ -35,7 +35,7 @@ no basic auth credentials
 services:
   aws-ecr-token-refresher:
     image: docker.io/karimz1/aws-ecr-token-refresher:latest
-    restart: unless-stopped
+    restart: always
     environment:
       AWS_ACCESS_KEY_ID:     ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
