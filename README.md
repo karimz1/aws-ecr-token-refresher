@@ -25,7 +25,7 @@ no `aws ecr get-login-password` headaches.
 
 - Bundled official `awscli` (v2) — nothing to install on the host
 - Works with *any* ECR‑enabled region or account
-- Pluggable refresh interval (default **5 min**)
+- Pluggable refresh interval (default **8 hours**)
 - Zero‑downtime rotation; existing pulls keep working
 - Verbose logging for easy troubleshooting
 
@@ -85,7 +85,7 @@ requests now carry valid Basic Auth.
 | `AWS_ACCESS_KEY_ID`     | —       | IAM user or role with `ecr:GetAuthorizationToken` |
 | `AWS_SECRET_ACCESS_KEY` | —       | Secret for the above key                          |
 | `AWS_REGION`            | —       | Primary region of your ECR repositories           |
-| `INTERVAL_SECONDS`      | `300`   | How often to refresh the token (min = 60)         |
+| `INTERVAL_SECONDS`      | `28800`   | How often to refresh the token (h = 8)         |
 
 *The container will exit if any mandatory variable is missing.*
 

@@ -3,6 +3,7 @@ import re
 import argparse
 import requests
 from datetime import datetime
+from pathlib import Path
 
 def parse_args():
     """
@@ -35,11 +36,11 @@ def read_file(file_path: str) -> str:
     """
     Reads and returns the content of the specified file.
     """
+    abs_path = (Path(__file__).parent / relpath).expanduser().resolve()
     try:
-        with open(file_path, "r", encoding="utf-8") as file:
-            return file.read()
+        abs_path.read_text(encoding="utf-8")
     except Exception as e:
-        raise RuntimeError(f"Error reading {file_path}: {e}")
+        raise RuntimeError(f"Error reading {abs_path}: {e}") from e
 
 def fix_image_links(markdown_content: str, base_url: str) -> str:
     """
