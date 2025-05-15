@@ -28,6 +28,7 @@ RUN apt-get update && \
 
 WORKDIR /scripts
 RUN git clone https://github.com/karimz1/AWS-Authentication-Scripts.git ./
+RUN rm -rf /scripts/.git
 COPY entrypoint.ps1 .
 
 ENTRYPOINT ["pwsh", "-NoLogo", "-NoProfile", "-File", "/scripts/entrypoint.ps1"]
