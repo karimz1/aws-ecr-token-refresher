@@ -37,6 +37,7 @@ services:
     image: docker.io/karimz1/aws-ecr-token-refresher:latest
     restart: always
     environment:
+      AWS_ACCOUNT_ID:        ${AWS_ACCOUNT_ID}
       AWS_ACCESS_KEY_ID:     ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_REGION:            ${AWS_REGION}
@@ -78,6 +79,7 @@ No extra flags — Watchtower now pulls images with the freshly rotated credenti
 
 | Variable                | Required | Default | Description                                             |
 | ----------------------- | -------- | ------- | ------------------------------------------------------- |
+| `AWS_ACCOUNT_ID`        | ✖        | —       | AWS Account ID, if not supplied, retrieved via STS  |
 | `AWS_ACCESS_KEY_ID`     | ✔        | —       | IAM user/role key with `ecr:GetAuthorizationToken`      |
 | `AWS_SECRET_ACCESS_KEY` | ✔        | —       | Secret for the above key                                |
 | `AWS_REGION`            | ✔        | —       | Primary region of your ECR repositories                 |
