@@ -22,7 +22,7 @@ no basic auth credentials
 
 ## ⚡ Quick start
 
-\### 1 — Drop into your `docker-compose.yml`
+### 1 — Drop into your `docker-compose.yml`
 
 ``` yml
 services:
