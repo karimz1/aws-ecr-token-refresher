@@ -36,7 +36,7 @@ def read_file(file_path: str) -> str:
     """
     Reads and returns the content of the specified file.
     """
-    abs_path = (Path(__file__).parent / relpath).expanduser().resolve()
+    abs_path = (Path(__file__).parent / file_path).expanduser().resolve()
     try:
         abs_path.read_text(encoding="utf-8")
     except Exception as e:
