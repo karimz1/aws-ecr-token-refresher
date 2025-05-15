@@ -32,15 +32,26 @@ def parse_args():
     )
     return parser.parse_args()
 
-def read_file(file_path: str) -> str:
-    """Read a text file given *any* path (absolute, relative to CWD, or
-    relative to this script’s folder)."""
+def read_file(path_str: str) -> str:
+    """
+    Read the contents of a UTF-8 text file given *any* path.
+    The function accepts absolute paths, paths relative to the **current
+    working directory (CWD)**, or paths relative to **the directory that
+    contains this module**.  It tries each location, in that order, so callers
+    never need to count “..” segments.
+    """
 
-    p = Path(file_path).expanduser()
-    if not p.is_absolute() and not p.exists():
-        p = Path(__file__).parent / p
+    p = Path(path_str).expanduser()
+    if not p.is_absolute():
+        p_cwd = (Path.cwd() / p).resolve()
+        if p_cwd.exists():
+            p = p_cwd
+        else:
+            p = (Path(__file__).parent / p).resolve()
     try:
         return p.read_text(encoding="utf-8")
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f"Could not find: {p}") from e
     except Exception as e:
         raise RuntimeError(f"Error reading {p}: {e}") from e
 
