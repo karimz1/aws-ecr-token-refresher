@@ -87,12 +87,13 @@ No extra flags — Watchtower now pulls images with the freshly rotated credenti
 
 *The container exits if any required variable is missing.*
 
-
 ## ❤️ Support Further Development
 
 If you find **AWS ECR Token Refresher** valuable, please consider supporting the project (entirely optional). Your contributions help fund the infrastructure and development tools needed to build even better open source software during my free time. Thank you for your support!
 
 ### 🤗 [Donate using PayPal](https://paypal.me/KarimZouine972)
+
+ - [Source Code available on GitHub](https://github.com/karimz1/aws-ecr-token-refresher)
 
 ___
 
