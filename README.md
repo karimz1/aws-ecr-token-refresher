@@ -94,6 +94,7 @@ If you find **AWS ECR Token Refresher** valuable, please consider supporting the
 
 ### 🤗 [Donate using PayPal](https://paypal.me/KarimZouine972)
 
+___
 
 ## 📜 License
 
