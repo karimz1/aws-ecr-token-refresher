@@ -1,39 +1,30 @@
 # AWS ECR Token Refresher
 
-> A drop‑in sidecar that keeps your host Docker daemon authenticated
-> to **Amazon Elastic Container Registry (ECR)** — even for tools that
-> rely on plain Basic Auth such as [Watchtower](https://github.com/containrrr/watchtower), CI runners, or ad‑hoc
-> `docker pull`s.
+> A lightweight sidecar that keeps your host Docker daemon **permanently authenticated** to Amazon Elastic Container Registry (ECR). Works out of the box with any tooling that relies on plain Basic Auth — such as [Watchtower](https://github.com/containrrr/watchtower), CI runners, GitOps agents, or manual `docker pull`s.
 
-## 🚀 Problem & solution
+## 🚀 Why do I need this?
 
-AWS ECR tokens expire every 12 hours.
-The official [amazon‑ecr‑credential‑helper](https://github.com/awslabs/amazon-ecr-credential-helper) renews tokens **only when
-`docker` itself makes an image request**, which is fine for most pulls
-but fails when a third‑party client performs additional manifest
-requests before the pull (e.g. Watchtower).
-“no basic auth credentials” errors break your automated updates.
+ECR issues login tokens that expire every **12 hours**. The official [amazon‑ecr‑credential‑helper](https://github.com/awslabs/amazon-ecr-credential-helper) renews the token transparently for most workflows, but some clients (for example Watchtower) perform extra manifest calls *before* the pull. They end up hitting the registry without fresh credentials and fail with:
 
-**ECR Token Refresher** runs the AWS CLI in a lightweight container on a
-configurable schedule, logs in to ECR, and persists the credentials to
-the host’s `~/.docker/config.json`.
-Anything that talks to your local Docker socket will therefore see
-fresh Basic Auth credentials—no code changes, no custom scripts,
-no `aws ecr get-login-password` headaches.
+```
+no basic auth credentials
+```
+
+**AWS ECR Token Refresher** refreshes the token proactively on a schedule you control and writes it to `~/.docker/config.json` on the host. Any process that talks to the local Docker socket therefore sees valid credentials — no code changes, no wrapper scripts, no `aws ecr get-login-password` gymnastics.
 
 ## 🧰 Features
 
-- Bundled official `awscli` (v2) — nothing to install on the host
-- Works with *any* ECR‑enabled region or account
-- Pluggable refresh interval (default **8 hours**)
-- Zero‑downtime rotation; existing pulls keep working
-- Verbose logging for easy troubleshooting
+- Bundles official **AWS CLI v2** — nothing to install on the host
+- Supports any AWS account and region
+- Configurable refresh interval (default **8 h**, well inside the 12 h expiry window)
+- Zero‑downtime rotation — ongoing pulls keep working
+- Verbose logs for easy troubleshooting
 
 ## ⚡ Quick start
 
-### 1 — Add to `docker-compose.yml`
+\### 1 — Drop into your `docker-compose.yml`
 
-```yaml
+``` yml
 services:
   aws-ecr-token-refresher:
     image: docker.io/karimz1/aws-ecr-token-refresher:latest
@@ -50,18 +41,17 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 ```
 
-Spin it up:
+Bring it up:
 
-```bash
+```
 docker compose up -d
 ```
 
-That’s it! From now on **every** container on this host can pull
-private ECR images automatically.
+From now on **any** container on the host can pull from private ECR repositories seamlessly.
 
-### 2 — Update containers with Watchtower
+\### 2 — Example: Watchtower auto‑updates
 
-```yaml
+``` yml
 services:
   watchtower:
     image: containrrr/watchtower
@@ -75,34 +65,24 @@ services:
     command: --label-enable --cleanup --interval 300 --rolling-restart
 ```
 
-No extra flags required—Watchtower is happy because the manifest
-requests now carry valid Basic Auth.
+No extra flags — Watchtower now pulls images with the freshly rotated credentials.
 
-## 🔧 Configuration
+## 🔧 Configuration reference
 
-| Variable                | Default | Description                                       |
-| ----------------------- | ------- | ------------------------------------------------- |
-| `AWS_ACCESS_KEY_ID`     | —       | IAM user or role with `ecr:GetAuthorizationToken` |
-| `AWS_SECRET_ACCESS_KEY` | —       | Secret for the above key                          |
-| `AWS_REGION`            | —       | Primary region of your ECR repositories           |
-| `INTERVAL_SECONDS`      | `28800`   | How often to refresh the token (h = 8)         |
+| Variable                | Required | Default | Description                                             |
+| ----------------------- | -------- | ------- | ------------------------------------------------------- |
+| `AWS_ACCESS_KEY_ID`     | ✔        | —       | IAM user/role key with `ecr:GetAuthorizationToken`      |
+| `AWS_SECRET_ACCESS_KEY` | ✔        | —       | Secret for the above key                                |
+| `AWS_REGION`            | ✔        | —       | Primary region of your ECR repositories                 |
+| `INTERVAL_SECONDS`      | ✖        | `28800` | How often to refresh (seconds). Should be ≤ 43200 (12 h). |
 
-*The container will exit if any mandatory variable is missing.*
-
-## 🔒 Security notes
-
-- Mount *only* the Docker socket and the credentials volume that you
-  need.
-- Use an IAM user/role restricted to
-  `ecr:GetAuthorizationToken` **and** the specific registries you need.
-- Consider AWS session tokens or [IAM Roles Anywhere](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_anywhere.html) for short‑lived
-  credentials in on‑prem environments.
+*The container exits if any required variable is missing.*
 
 ## 📜 License
 
-Apache‑2.0 © 2025 Karim Zouine.
+Apache‑2.0 © 2025 Karim Zouine
 
 ## 🤝 Acknowledgements
 
-- [amazon‑ecr‑credential‑helper](https://github.com/awslabs/amazon-ecr-credential-helper) — inspiration & reference
+- [amazon‑ecr‑credential‑helper](https://github.com/awslabs/amazon-ecr-credential-helper) — design inspiration
 - [Watchtower](https://github.com/containrrr/watchtower) — seamless container auto‑updates

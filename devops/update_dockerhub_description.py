@@ -33,14 +33,16 @@ def parse_args():
     return parser.parse_args()
 
 def read_file(file_path: str) -> str:
-    """
-    Reads and returns the content of the specified file.
-    """
-    abs_path = (Path(__file__).parent / file_path).expanduser().resolve()
+    """Read a text file given *any* path (absolute, relative to CWD, or
+    relative to this script’s folder)."""
+
+    p = Path(file_path).expanduser()
+    if not p.is_absolute() and not p.exists():
+        p = Path(__file__).parent / p
     try:
-        abs_path.read_text(encoding="utf-8")
+        return p.read_text(encoding="utf-8")
     except Exception as e:
-        raise RuntimeError(f"Error reading {abs_path}: {e}") from e
+        raise RuntimeError(f"Error reading {p}: {e}") from e
 
 def fix_image_links(markdown_content: str, base_url: str) -> str:
     """
