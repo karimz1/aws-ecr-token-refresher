@@ -65,7 +65,7 @@ jobs:
       - name: Update Docker Hub Description
         run: |
           python update_dockerhub_description.py \
-              --readme ReadMe.md \
+              --readme README.md \
               --branch "${{ github.ref }}" \
               --base-url "https://raw.githubusercontent.com/karimz1/aws-ecr-token-refresher/main"
         env:
